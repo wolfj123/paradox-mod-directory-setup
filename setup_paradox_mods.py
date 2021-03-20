@@ -8,24 +8,28 @@ import argparse
 
 backup_folder = "BACKUP"
 
-# Create the parser
-my_parser = argparse.ArgumentParser(description='Setup Paradox-Interactive mods for use in GOG versions of the game.')
+# # Create the parser
+# my_parser = argparse.ArgumentParser(description='Setup Paradox-Interactive mods for use in GOG versions of the game.')
 
+# # Add the arguments
+# my_parser.add_argument('-dirs',
+#                        type=str,
+#                        metavar="dirs",
+#                        help='mod directory(ies)', nargs="+")
 
-# Add the arguments
-my_parser.add_argument('-dirs',
-                       type=str,
-                       metavar="dirs",
-                       help='mod directory(ies)', nargs="+")
+# args = my_parser.parse_args()
 
-args = my_parser.parse_args()
+# if not args.dirs:
+#     print('Must specify mod directories')
+#     quit()
 
-if not args.dirs:
-    print('Must specify mod directories')
-    quit()
+args = sys.argv.copy()
+args.pop(0)
+
 
 def main():
-    for dr in args.dirs:
+    # for dr in args.dirs:
+    for dr in args:
         path , dir_name = ntpath.split(dr)
         handle_mod_dir(path, dir_name)
 
