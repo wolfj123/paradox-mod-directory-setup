@@ -23,37 +23,20 @@ def main():
         # move_downloaded_dir_to_cwd()
 
 def get_mod_download_url(mod_url):
-    zip_url = ''
+    zip_url = 'https://modscontent.paradox-interactive.com/{game_code}/{mod_code}/repo/Any__Any/{mod_version}/complete/{mod_code}.zip'
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     driver = webdriver.Chrome(chromedriver_path, options = options)  # Optional argument, if not specified will search path.
     driver.get(mod_url)
-    time.sleep(5) # Let the user actually see something!
+    time.sleep(3) # Let the user actually see something!
     url_source = driver.page_source
-
-    print("********************* INFO *********************************")
-    # info = re.findall('url\("https://modscontent.paradox-interactive.com/([\d|[a-zA-Z]]+)/([\d|[a-zA-Z]|\-]+)', url_source)
-    info = re.findall('https://modscontent.paradox-interactive.com/([\d|[a-zA-Z]]+)/', url_source)
-    print(info)
-
-    # game_code = info[0]
-    # mod_code = info[1]
-    # mod_latest_version = re.findall('src-components-Mods-Details-Header-styles__value--2VrqZ">(\d+)<', url_source)[0]
- 
+    info = re.findall('https://modscontent.paradox-interactive.com/([a-zA-Z|\d]+)/([\-|a-zA-Z|\d]+)', url_source)
+    mod_latest_version = re.findall('src-components-Mods-Details-Header-styles__value--2VrqZ">(\d+)<', url_source)[0]
+    game_code = info[0][0]
+    mod_code = info[0][1]
     driver.quit()
-
-    
-    # f = urllib.request.urlopen(mod_url)
-    # url_source = f.read().decode("utf-8")
-    # print(url_source)
-    # # info = re.findall('url\("https://modscontent.paradox-interactive.com/([\d|[a-zA-Z]]+)/([\d|[a-zA-Z]|\-]+)', url_source)
-    # info = re.findall('"https://modscontent.paradox-interactive.com/([\d|[a-zA-Z]]+)/', url_source)
-    # print(info)
-
-    # game_code = info[0]
-    # mod_code = info[1]
-    # mod_latest_version = re.findall('src-components-Mods-Details-Header-styles__value--2VrqZ">(\d+)<', url_source)[0]
-
+    zip_url = zip_url.format(game_code = game_code, mod_code = mod_code, mod_version = mod_latest_version)
+    print(zip_url)
     return zip_url
 
 def download_mod(zip_url):
