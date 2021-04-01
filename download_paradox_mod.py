@@ -18,9 +18,7 @@ args.pop(0)
 def main():
     for url in args:
         zip_url = get_mod_download_url(url)
-        print(zip_url)
-        # download_mod(zip_url)
-        # move_downloaded_dir_to_cwd()
+        download_zip_file(zip_url)
 
 def get_mod_download_url(mod_url):
     zip_url = 'https://modscontent.paradox-interactive.com/{game_code}/{mod_code}/repo/Any__Any/{mod_version}/complete/{mod_code}.zip'
@@ -36,24 +34,32 @@ def get_mod_download_url(mod_url):
     mod_code = info[0][1]
     driver.quit()
     zip_url = zip_url.format(game_code = game_code, mod_code = mod_code, mod_version = mod_latest_version)
-    print(zip_url)
     return zip_url
 
-def download_mod(zip_url):
+def download_zip_file(zip_url):
+    remote = urllib.request.urlopen(zip_url)  # read remote file
+    data = remote.read()  # read from remote file
+    remote.close()  # close urllib request
+    local = open('download.zip', 'wb')  # write binary to local file
+    local.write(data)
+    local.close()  # close file
+
+def extract_from_zip_file(path, name):
     print("TODO")
+    
 
 def move_downloaded_dir_to_cwd(download_dir, mod_id):
     print("TODO")
 
 
-def chromedirver_example():
-    driver = webdriver.Chrome(chromedriver_path)  # Optional argument, if not specified will search path.
-    driver.get('http://www.google.com/')
-    time.sleep(5) # Let the user actually see something!
-    search_box = driver.find_element_by_name('q')
-    search_box.send_keys('ChromeDriver')
-    search_box.submit()
-    time.sleep(5) # Let the user actually see something!
-    driver.quit()
+# def chromedirver_example():
+#     driver = webdriver.Chrome(chromedriver_path)  # Optional argument, if not specified will search path.
+#     driver.get('http://www.google.com/')
+#     time.sleep(5) # Let the user actually see something!
+#     search_box = driver.find_element_by_name('q')
+#     search_box.send_keys('ChromeDriver')
+#     search_box.submit()
+#     time.sleep(5) # Let the user actually see something!
+#     driver.quit()
 
 main()

@@ -9,3 +9,9 @@ A small script that organizes "raw" Paradox Interactive mod directories to ones 
 - [Selenium](https://www.selenium.dev)
 - [ChromeDriver](https://chromedriver.chromium.org/)
 - [SteamCMD](https://developer.valvesoftware.com/wiki/SteamCMD)
+
+
+
+## TODO
+- configurations (exe paths, directories, etc...)
+- edge cases and errors
