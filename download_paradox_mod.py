@@ -33,15 +33,19 @@ target_dir = ""
 
 
 def main():
+    main_api(args)
+
+def main_api(url_list):
     get_config_settings()
     list_of_created_dirs = []
-    for url in args:
+    for index, url in enumerate(url_list):
         zip_url = get_mod_download_url(url)
         download_zip_file(zip_url)
-        extract_from_zip_file(os.getcwd(), download_file_name)
-        new_dir = move_downloaded_dir_to_target_dir(os.path.join(os.getcwd(), new_mod_dir), target_dir, new_mod_dir)
+        extract_from_zip_file(os.getcwd(), download_file_name, new_mod_dir)
+        new_dir = move_downloaded_dir_to_target_dir(os.path.join(os.getcwd(), new_mod_dir), target_dir, new_mod_dir + "_{0}".format(index))
         if new_dir:
             list_of_created_dirs.append(new_dir)
+    return list_of_created_dirs
 
 
 def get_config_settings():
@@ -85,7 +89,7 @@ def download_zip_file(zip_url):
     local.write(data)
     local.close()  # close file
 
-def extract_from_zip_file(path, name):
+def extract_from_zip_file(path, name, new_mod_dir):
     zip_file = os.path.join(path, name)
     with zipfile.ZipFile(zip_file, 'r') as zip_ref:
         os.mkdir(os.path.join(new_mod_dir))
@@ -95,7 +99,7 @@ def extract_from_zip_file(path, name):
 def move_downloaded_dir_to_target_dir(download_dir, target_dir, mod_name):
     try:
         location = os.path.join(target_dir, mod_name)
-        print(location)
+        # print(location)
         shutil.move(download_dir, location)
         return location
     except:

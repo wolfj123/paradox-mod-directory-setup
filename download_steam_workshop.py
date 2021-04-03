@@ -27,12 +27,15 @@ steamcmd_path = ""
 steamcmd_exe_name = "steamcmd.exe"
 
 def main():
+    main_api(args)
+
+def main_api(url_list):
     get_config_settings()
     steamcmd_exe = os.path.join(steamcmd_path, steamcmd_exe_name)
     login_command = "login anonymous"
     list_of_created_dirs = []
 
-    for url in args:
+    for url in enumerate(url_list):
         game_id , mod_id = collect_info_from_url(url)
         download_command = "workshop_download_item {game_id} {mod_id}".format(game_id = game_id, mod_id = mod_id)
         download_dir = os.path.join(steamcmd_path, "steamapps", "workshop", "content", "{game_id}", "{mod_id}").format(game_id = game_id, mod_id = mod_id)
@@ -40,6 +43,7 @@ def main():
         new_dir = move_downloaded_dir_to_target_dir(download_dir, target_dir, mod_id)
         if new_dir:
             list_of_created_dirs.append(new_dir)
+    return list_of_created_dirs
 
 def get_config_settings():
     global steamcmd_path
