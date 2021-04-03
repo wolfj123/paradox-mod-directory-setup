@@ -14,15 +14,20 @@ import shutil
 import urllib.request
 import re
 import sys
+import json
 
 args = sys.argv.copy()
 args.pop(0)
-default_target_dir = os.getcwd()
 
+default_target_dir = os.getcwd()
+target_dir = ""
+
+default_steamcmd_path = "E:\steamcmd"
+steamcmd_path = ""
+steamcmd_exe = "steamcmd.exe"
 
 def main():
-    steamcmd_path = "E:\steamcmd"
-    steamcmd_exe = os.path.join(steamcmd_path, "steamcmd.exe")
+    steamcmd_exe = os.path.join(steamcmd_path, steamcmd_exe)
     login_command = "login anonymous"
     list_of_created_dirs = []
 
@@ -31,9 +36,26 @@ def main():
         download_command = "workshop_download_item {game_id} {mod_id}".format(game_id = game_id, mod_id = mod_id)
         download_dir = os.path.join(steamcmd_path, "steamapps", "workshop", "content", "{game_id}", "{mod_id}").format(game_id = game_id, mod_id = mod_id)
         download_mod(steamcmd_exe, login_command, download_command)
-        new_dir = move_downloaded_dir_to_target_dir(download_dir, default_target_dir, mod_id)
+        new_dir = move_downloaded_dir_to_target_dir(download_dir, target_dir, mod_id)
         if new_dir:
             list_of_created_dirs.append(new_dir)
+
+def get_config_settings():
+    global steamcmd_path
+    global target_dir
+    config_file = os.path.join(os.getcwd(), "config.json")
+    with open(config_file) as f:
+        data = json.load(f)
+        if('steamcmd_path' in data):
+            steamcmd_path = data['steamcmd_path']
+        else:
+            steamcmd_path = default_steamcmd_path
+        
+        if('target_dir' in data):
+            target_dir = data['target_dir']
+        else:
+            target_dir = default_target_dir
+
 
 def collect_info_from_url(url):
     mod_id = re.findall('id=(\d+)', url)[0]
