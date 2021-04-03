@@ -2,6 +2,10 @@
 
 "steamcmd_path" : "E:\\steamcmd" ,
 "chromedriver_path" : "C:\\Users\\user\\Documents\\My Documents\\Tools\\chromedriver\\chromedriver_89.exe" ,
-"target_dir" : "C:\\Users\\user\\Documents\\Paradox Interactive\\Crusader Kings III\\mod"
+"target_dir": "C:\\Users\\user\\Documents\\Paradox Interactive\\Stellaris\\mod" ,
+
+"stellaris_target_dir": "C:\\Users\\user\\Documents\\Paradox Interactive\\Stellaris\\mod" ,
+"ck3_target_dir" : "C:\\Users\\user\\Documents\\Paradox Interactive\\Crusader Kings III\\mod"
 
 }
+

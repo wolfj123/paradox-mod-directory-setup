@@ -24,10 +24,11 @@ target_dir = ""
 
 default_steamcmd_path = "E:\steamcmd"
 steamcmd_path = ""
-steamcmd_exe = "steamcmd.exe"
+steamcmd_exe_name = "steamcmd.exe"
 
 def main():
-    steamcmd_exe = os.path.join(steamcmd_path, steamcmd_exe)
+    get_config_settings()
+    steamcmd_exe = os.path.join(steamcmd_path, steamcmd_exe_name)
     login_command = "login anonymous"
     list_of_created_dirs = []
 
