@@ -1,3 +1,12 @@
+# USAGE:
+# python setup_paradox_mod.py <mod_dir_1> <mod_dir_2> ... <mod_dir_n>
+# 
+# CONFIG:
+# 
+#
+#
+
+
 import sys
 import shutil
 import os

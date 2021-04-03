@@ -1,3 +1,12 @@
+# USAGE:
+# python download_paradox_mod.py <paradox_url_1> <paradox_url_2> ... <paradox_url_n>
+# 
+# CONFIG:
+# chromedriver_path = path to chromedriver parent directory
+# target_dir : path to dir to move downloaded file to
+#
+
+
 import os
 import subprocess
 import time
@@ -5,26 +14,32 @@ import shutil
 import urllib.request
 import re
 import sys
-
+import zipfile
 from selenium import webdriver
 
-chromedriver_path = r"C:\Users\user\Documents\My Documents\Tools\chromedriver\chromedriver_89.exe"
-# chromedriver_path = "C:\\Users\\user\\Documents\\My Documents\\Tools\\chromedriver\\chromedriver.exe"
-steamcmd_path = "E:\steamcmd"
 
+download_file_name = 'download.zip'
+new_mod_dir = 'NEW_MOD'
+default_chromedriver_path = r"C:\Users\user\Documents\My Documents\Tools\chromedriver\chromedriver_89.exe"
+default_target_dir = os.getcwd()
 args = sys.argv.copy()
 args.pop(0)
 
 def main():
+    list_of_created_dirs = []
     for url in args:
         zip_url = get_mod_download_url(url)
         download_zip_file(zip_url)
+        extract_from_zip_file(os.getcwd(), download_file_name)
+        new_dir = move_downloaded_dir_to_target_dir(os.path.join(os.getcwd(), new_mod_dir), default_target_dir, new_mod_dir)
+        if new_dir:
+            list_of_created_dirs.append(new_dir)
 
 def get_mod_download_url(mod_url):
     zip_url = 'https://modscontent.paradox-interactive.com/{game_code}/{mod_code}/repo/Any__Any/{mod_version}/complete/{mod_code}.zip'
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
-    driver = webdriver.Chrome(chromedriver_path, options = options)  # Optional argument, if not specified will search path.
+    driver = webdriver.Chrome(default_chromedriver_path, options = options)  # Optional argument, if not specified will search path.
     driver.get(mod_url)
     time.sleep(3) # Let the user actually see something!
     url_source = driver.page_source
@@ -40,26 +55,23 @@ def download_zip_file(zip_url):
     remote = urllib.request.urlopen(zip_url)  # read remote file
     data = remote.read()  # read from remote file
     remote.close()  # close urllib request
-    local = open('download.zip', 'wb')  # write binary to local file
+    local = open(download_file_name, 'wb')  # write binary to local file
     local.write(data)
     local.close()  # close file
 
 def extract_from_zip_file(path, name):
-    print("TODO")
+    with zipfile.ZipFile(os.path.join(path, name), 'r') as zip_ref:
+        os.mkdir(os.path.join(new_mod_dir))
+        zip_ref.extractall(new_mod_dir)
     
+def move_downloaded_dir_to_target_dir(download_dir, target_dir, mod_name):
+    try:
+        location = os.path.join(target_dir, mod_name)
+        shutil.move(download_dir, location)
+        return location
+    except:
+        print("FAILED")
+        return ""
 
-def move_downloaded_dir_to_cwd(download_dir, mod_id):
-    print("TODO")
-
-
-# def chromedirver_example():
-#     driver = webdriver.Chrome(chromedriver_path)  # Optional argument, if not specified will search path.
-#     driver.get('http://www.google.com/')
-#     time.sleep(5) # Let the user actually see something!
-#     search_box = driver.find_element_by_name('q')
-#     search_box.send_keys('ChromeDriver')
-#     search_box.submit()
-#     time.sleep(5) # Let the user actually see something!
-#     driver.quit()
 
 main()
